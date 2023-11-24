@@ -7,6 +7,12 @@ const createUserIntoDB = async (user: TUser) => {
 }
 
 const getAllUsersFromDB = async () => {
+  // const options = {
+  //   projection: { username: 1, fullName: 1, age: 1, email: 1, address: 1 },
+  // }
+
+  // const projection = {username: 1, fullName: 1, age: 1, email: 1, address: 1 }
+
   const result = await UserModel.find()
   return result
 }

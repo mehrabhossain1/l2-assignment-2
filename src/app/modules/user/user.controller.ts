@@ -22,13 +22,29 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
-  const result = await userServices.getAllUsersFromDB()
+  try {
+    // const projection = {
+    //   username: 1,
+    //   fullName: 1,
+    //   age: 1,
+    //   email: 1,
+    //   address: 1,
+    // }
 
-  res.status(200).json({
-    success: true,
-    message: 'Users fetched successfully!',
-    data: result,
-  })
+    const result = await userServices.getAllUsersFromDB()
+
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched successfully!',
+      data: result,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error,
+    })
+  }
 }
 
 export const userControllers = {
