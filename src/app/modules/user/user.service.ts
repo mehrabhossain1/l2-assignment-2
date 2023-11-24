@@ -7,12 +7,6 @@ const createUserIntoDB = async (user: TUser) => {
 }
 
 const getAllUsersFromDB = async () => {
-  // const options = {
-  //   projection: { username: 1, fullName: 1, age: 1, email: 1, address: 1 },
-  // }
-
-  // const projection = {username: 1, fullName: 1, age: 1, email: 1, address: 1 }
-
   const result = await UserModel.aggregate([
     {
       $project: {
@@ -26,7 +20,19 @@ const getAllUsersFromDB = async () => {
   ])
   return result
 }
+
+const getSingleUserFromDB = async (id: number) => {
+  const result = await UserModel.aggregate([
+    {
+      $match: { userId: id },
+    },
+  ])
+
+  return result
+}
+
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
+  getSingleUserFromDB,
 }
