@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { TUser } from './user.interface'
 
 const orderSchema = new Schema({
@@ -27,6 +27,6 @@ const userSchema = new Schema<TUser>({
   orders: [orderSchema],
 })
 
-const UserModel = mongoose.model<TUser>('User', userSchema)
+const UserModel = model<TUser>('User', userSchema)
 
 export default UserModel
