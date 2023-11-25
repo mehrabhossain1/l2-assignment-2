@@ -9,6 +9,6 @@ router.get('/', userControllers.getAllUsers)
 
 router.get('/:userId', userControllers.getSingleUser)
 
-// router.put('/:userId', userControllers.updateUser)
+router.put('/:userId', userControllers.updateUser)
 
 export const userRoutes = router
