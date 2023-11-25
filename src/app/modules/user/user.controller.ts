@@ -4,7 +4,6 @@ import { userServices } from './user.service'
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body
-
     const result = await userServices.createUserIntoDB(user)
 
     res.status(201).json({
@@ -42,9 +41,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    console.log(userId)
     const result = await userServices.getSingleUserFromDB(Number(userId))
-    // console.log(result)
 
     res.status(200).json({
       success: true,
@@ -60,8 +57,25 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 }
 
+// const updateUser = async (req: Request, res: Response) => {
+//   try {
+//     const userData = req.body
+//     const { userId } = req.params
+//     const result = await userServices.updateUserInDB(Number(userId), userData)
+
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'User updated successfully!',
+//       data: result,
+//     })
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
+  // updateUser,
 }

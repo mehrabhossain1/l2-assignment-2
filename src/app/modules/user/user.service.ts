@@ -31,8 +31,19 @@ const getSingleUserFromDB = async (id: number) => {
   return result
 }
 
+// const updateUserInDB = async (id: number, userData: TUser) => {
+//   console.log(id)
+//   const result = await UserModel.findByIdAndUpdate(id, userData, {
+//     new: true,
+//     runValidators: true,
+//   })
+
+//   return result
+// }
+
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
+  // updateUserInDB,
 }
