@@ -63,9 +63,9 @@ const getSingleUser = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   const userData = req.body
-  console.log(userData)
-  const userId = req.params.userId
-  console.log(userId)
+
+  const { userId } = req.params
+
   const result = await userServices.getUpdatedUserFromDB(
     Number(userId),
     userData,
