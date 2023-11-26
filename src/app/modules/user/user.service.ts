@@ -26,7 +26,7 @@ const getSingleUserFromDB = async (id: number): Promise<TUser[] | null> => {
     {
       $match: { userId: id },
     },
-  ])
+  ]).project({ password: 0 })
 
   return result
 }
@@ -42,7 +42,7 @@ const getUpdatedUserFromDB = async (
       new: true,
       runValidators: true,
     },
-  )
+  ).select('-password')
 
   return result
 }
