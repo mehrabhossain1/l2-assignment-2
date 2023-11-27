@@ -1,8 +1,8 @@
 import { TUser } from './user.interface'
 import UserModel from './user.model'
 
-const createUserIntoDB = async (user: TUser): Promise<TUser> => {
-  const result = await UserModel.create(user)
+const createUserIntoDB = async (userData: TUser): Promise<TUser> => {
+  const result = await UserModel.create(userData)
   return result
 }
 
@@ -21,10 +21,10 @@ const getAllUsersFromDB = async (): Promise<TUser[]> => {
   return result
 }
 
-const getSingleUserFromDB = async (id: number): Promise<TUser[] | null> => {
+const getSingleUserFromDB = async (userId: number): Promise<TUser[] | null> => {
   const result = await UserModel.aggregate([
     {
-      $match: { userId: id },
+      $match: { userId },
     },
   ]).project({ password: 0 })
 
