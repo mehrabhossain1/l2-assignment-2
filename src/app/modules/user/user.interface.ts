@@ -1,3 +1,5 @@
+import { Model } from 'mongoose'
+
 export type TUser = {
   userId: number
   username: string
@@ -27,3 +29,9 @@ export type TUser = {
     },
   ]
 }
+
+export type TUserMethods = {
+  isUserExists(userId: number): Promise<TUser | null>
+}
+
+export type TUserModel = Model<TUser, Record<string, never>, TUserMethods>
