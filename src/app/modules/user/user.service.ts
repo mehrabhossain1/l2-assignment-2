@@ -22,17 +22,17 @@ const getAllUsersFromDB = async (): Promise<TUser[]> => {
 }
 
 const getSingleUserFromDB = async (userId: number): Promise<TUser[] | null> => {
-  if (!(await UserModel.isUserExists(userId))) {
-    throw new Error('User already exists')
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.aggregate([
+      {
+        $match: { userId },
+      },
+    ]).project({ password: 0 })
+
+    return result
+  } else {
+    throw new Error('No users')
   }
-
-  const result = await UserModel.aggregate([
-    {
-      $match: { userId },
-    },
-  ]).project({ password: 0 })
-
-  return result
 }
 
 const getUpdatedUserFromDB = async (
