@@ -1,3 +1,4 @@
+import { NextFunction } from 'express'
 import { Model } from 'mongoose'
 
 export type TUser = {

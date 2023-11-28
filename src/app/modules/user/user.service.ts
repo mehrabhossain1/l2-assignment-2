@@ -15,6 +15,7 @@ const getAllUsersFromDB = async (): Promise<TUser[]> => {
         age: 1,
         email: 1,
         address: 1,
+        _id: 0,
       },
     },
   ])
@@ -27,11 +28,11 @@ const getSingleUserFromDB = async (userId: number): Promise<TUser[] | null> => {
       {
         $match: { userId },
       },
-    ]).project({ password: 0 })
+    ]).project({ password: 0, _id: 0, orders: 0, __v: 0 })
 
     return result
   } else {
-    throw new Error('No users')
+    throw new Error('No users in the db with this id')
   }
 }
 
@@ -39,16 +40,20 @@ const getUpdatedUserFromDB = async (
   userId: number,
   userData: TUser,
 ): Promise<TUser | null> => {
-  const result = await UserModel.findOneAndUpdate(
-    { userId: userId },
-    userData,
-    {
-      new: true,
-      runValidators: true,
-    },
-  ).select('-password')
+  if (!(await UserModel.isUserExists(userId))) {
+    throw new Error('No users in the db with this id')
+  } else {
+    const result = await UserModel.findOneAndUpdate(
+      { userId: userId },
+      userData,
+      {
+        new: true,
+        runValidators: true,
+      },
+    ).select('-password -_id -orders -__v')
 
-  return result
+    return result
+  }
 }
 
 export const userServices = {
