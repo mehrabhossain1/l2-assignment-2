@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { TUser, TUserMethods, TUserModel } from './user.interface'
+import { IUserModel, TUser } from './user.interface'
 
 const orderSchema = new Schema({
   productName: { type: String, required: true },
@@ -7,7 +7,7 @@ const orderSchema = new Schema({
   quantity: { type: Number, required: true },
 })
 
-const userSchema = new Schema<TUser, TUserModel, TUserMethods>({
+const userSchema = new Schema<TUser, IUserModel>({
   userId: { type: Number, unique: true, required: true },
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
@@ -27,11 +27,16 @@ const userSchema = new Schema<TUser, TUserModel, TUserMethods>({
   orders: [orderSchema],
 })
 
-userSchema.methods.isUserExists = async function (userId: number) {
+userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await UserModel.findOne({ userId })
   return existingUser
 }
 
-const UserModel = model<TUser, TUserModel>('User', userSchema)
+// userSchema.methods.isUserExists = async function (userId: number) {
+//   const existingUser = await UserModel.findOne({ userId })
+//   return existingUser
+// }
+
+const UserModel = model<TUser, IUserModel>('User', userSchema)
 
 export default UserModel
