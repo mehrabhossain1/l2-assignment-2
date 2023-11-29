@@ -63,20 +63,29 @@ const getSingleUser = async (req: Request, res: Response) => {
 }
 
 const updateUser = async (req: Request, res: Response) => {
-  const userData = req.body
+  try {
+    const userData = req.body
 
-  const { userId } = req.params
+    const { userId } = req.params
 
-  const result = await userServices.getUpdatedUserFromDB(
-    Number(userId),
-    userData,
-  )
+    const result = await userServices.getUpdatedUserFromDB(
+      Number(userId),
+      userData,
+    )
 
-  res.status(200).json({
-    success: true,
-    message: 'User updated successfully!',
-    data: result,
-  })
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: error.message,
+    })
+  }
 }
 
 export const userControllers = {
