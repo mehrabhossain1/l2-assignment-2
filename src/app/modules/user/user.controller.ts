@@ -88,9 +88,29 @@ const updateUser = async (req: Request, res: Response) => {
   }
 }
 
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    await userServices.deleteUserFromDB(Number(userId))
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully',
+      data: null,
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: error.message,
+    })
+  }
+}
+
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
+  deleteUser,
 }
