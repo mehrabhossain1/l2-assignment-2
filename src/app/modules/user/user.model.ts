@@ -27,15 +27,11 @@ const userSchema = new Schema<TUser, IUserModel>({
   orders: [orderSchema],
 })
 
+// Static method for user existence
 userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await UserModel.findOne({ userId })
   return existingUser
 }
-
-// userSchema.methods.isUserExists = async function (userId: number) {
-//   const existingUser = await UserModel.findOne({ userId })
-//   return existingUser
-// }
 
 const UserModel = model<TUser, IUserModel>('User', userSchema)
 

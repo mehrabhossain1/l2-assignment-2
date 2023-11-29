@@ -12,9 +12,9 @@ app.use(cors())
 app.use('/api/users', userRoutes)
 
 app.get('/', (req: Request, res: Response) => {
-  const a = 10
-
-  res.send(a)
+  res.send({
+    message: 'Welcome to Mongoose Express CRUD Mastery',
+  })
 })
 
 export default app
