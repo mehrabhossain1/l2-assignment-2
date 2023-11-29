@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { IUserModel, TUser } from './user.interface'
+import bcrypt from 'bcrypt'
+import config from '../../config'
 
 const orderSchema = new Schema({
   productName: { type: String, required: true },
@@ -32,6 +34,17 @@ userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await UserModel.findOne({ userId })
   return existingUser
 }
+
+// Password hashing
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  )
+  next()
+})
 
 const UserModel = model<TUser, IUserModel>('User', userSchema)
 
