@@ -10,8 +10,8 @@ const orderSchema = new Schema({
 })
 
 const userSchema = new Schema<TUser, IUserModel>({
-  userId: { type: Number, unique: true, required: true },
-  username: { type: String, unique: true, required: true },
+  userId: { type: Number, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   fullName: {
     firstName: { type: String, required: true },
@@ -43,6 +43,11 @@ userSchema.pre('save', async function (next) {
     user.password,
     Number(config.bcrypt_salt_rounds),
   )
+  next()
+})
+
+userSchema.post('save', function (doc, next) {
+  doc.password = ''
   next()
 })
 
