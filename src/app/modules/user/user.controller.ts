@@ -109,6 +109,24 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
+const addNewProduct = async (req: Request, res: Response) => {
+  try {
+    const userData = req.body
+
+    const productName = userData.productName
+    const price = userData.price
+    const quantity = userData.quantity
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: error.message,
+    })
+  }
+}
+
 export const userControllers = {
   createUser,
   getAllUsers,

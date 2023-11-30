@@ -51,11 +51,11 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.post('save', function (doc, next) {
-  doc.password = ''
+  doc.password = '***'
   next()
 })
 
-//
+// User delete
 userSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
   next()

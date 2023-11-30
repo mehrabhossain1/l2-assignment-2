@@ -58,9 +58,15 @@ const getUpdatedUserFromDB = async (
 }
 
 const deleteUserFromDB = async (userId: number) => {
-  const result = await UserModel.updateOne({ userId }, { isDeleted: true })
-  return result
+  if (!(await UserModel.isUserExists(userId))) {
+    throw new Error('No users in the db with this id')
+  } else {
+    const result = await UserModel.updateOne({ userId }, { isDeleted: true })
+    return result
+  }
 }
+
+const addNewProductInOrder = async()
 
 export const userServices = {
   createUserIntoDB,
