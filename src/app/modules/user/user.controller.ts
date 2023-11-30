@@ -131,6 +131,27 @@ const addOrder = async (req: Request, res: Response) => {
   }
 }
 
+const allOrdersOfTheUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId
+
+    const result = await userServices.getAllOrdersOfTheUserFromDB(userId)
+
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: result,
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: error.message,
+    })
+  }
+}
+
 export const userControllers = {
   createUser,
   getAllUsers,
@@ -138,4 +159,5 @@ export const userControllers = {
   updateUser,
   deleteUser,
   addOrder,
+  allOrdersOfTheUser,
 }
