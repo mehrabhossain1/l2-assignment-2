@@ -26,6 +26,10 @@ const userSchema = new Schema<TUser, IUserModel>({
     city: { type: String, required: true },
     country: { type: String, required: true },
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
   orders: [orderSchema],
 })
 
@@ -48,6 +52,12 @@ userSchema.pre('save', async function (next) {
 
 userSchema.post('save', function (doc, next) {
   doc.password = ''
+  next()
+})
+
+//
+userSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } })
   next()
 })
 

@@ -23,6 +23,7 @@ const userValidationSchema = z.object({
     city: z.string(),
     country: z.string(),
   }),
+  isDeleted: z.boolean(),
   orders: z.array(orderValidationSchema),
 })
 
