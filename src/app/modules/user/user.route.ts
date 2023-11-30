@@ -3,6 +3,7 @@ import { userControllers } from './user.controller'
 
 const router = express.Router()
 
+// User Management:
 router.post('/', userControllers.createUser)
 
 router.get('/', userControllers.getAllUsers)
@@ -12,5 +13,8 @@ router.get('/:userId', userControllers.getSingleUser)
 router.put('/:userId', userControllers.updateUser)
 
 router.delete('/:userId', userControllers.deleteUser)
+
+// Order Management:
+router.put('/:userId/orders', userControllers.addOrder)
 
 export const userRoutes = router

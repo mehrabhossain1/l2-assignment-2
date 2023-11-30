@@ -1,4 +1,4 @@
-import { TUser } from './user.interface'
+import { TOrder, TUser } from './user.interface'
 import UserModel from './user.model'
 
 const createUserIntoDB = async (userData: TUser): Promise<TUser> => {
@@ -66,7 +66,23 @@ const deleteUserFromDB = async (userId: number) => {
   }
 }
 
-const addNewProductInOrder = async()
+//  Order Management
+const addOrderIntoDB = async (userId: number, orderData: TOrder) => {
+  const user = await UserModel.findOne({ userId })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  if (!user.orders) {
+    user.orders = []
+  }
+
+  user.orders.push(orderData)
+  await user.save()
+
+  return { orders: user.orders }
+}
 
 export const userServices = {
   createUserIntoDB,
@@ -74,4 +90,5 @@ export const userServices = {
   getSingleUserFromDB,
   getUpdatedUserFromDB,
   deleteUserFromDB,
+  addOrderIntoDB,
 }
