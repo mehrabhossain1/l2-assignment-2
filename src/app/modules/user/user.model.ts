@@ -56,8 +56,8 @@ userSchema.post('save', function (doc, next) {
 })
 
 //
-userSchema.pre('find', function (next) {
-  this.find({ isDeleted: { $ne: true } })
+userSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
   next()
 })
 
