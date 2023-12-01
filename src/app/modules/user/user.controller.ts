@@ -165,7 +165,9 @@ const totalPriceOfTheUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',
-      data: result,
+      data: {
+        totalPrice: result,
+      },
     })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

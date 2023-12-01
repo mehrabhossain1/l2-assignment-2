@@ -112,7 +112,7 @@ const calculateTotalPriceOfAllOrders = async (userId: number) => {
     },
   ])
 
-  return result
+  return result[0].totalPrice
 }
 
 export const userServices = {
