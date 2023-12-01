@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { userServices } from './user.service'
 // import userValidationSchema from './user.validation'
@@ -13,7 +14,16 @@ const createUser = async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: 'User created successfully',
-      data: result,
+      data: {
+        userId: result.userId,
+        username: result.username,
+        fullName: result.fullName,
+        age: result.age,
+        email: result.email,
+        isActive: result.isActive,
+        hobbies: result.hobbies,
+        address: result.address,
+      },
     })
   } catch (error) {
     res.status(500).json({
@@ -52,7 +62,6 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: 'User fetched successfully!',
       data: result,
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -78,7 +87,6 @@ const updateUser = async (req: Request, res: Response) => {
       message: 'User updated successfully!',
       data: result,
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -99,7 +107,6 @@ const deleteUser = async (req: Request, res: Response) => {
       message: 'User deleted successfully!',
       data: result,
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -121,7 +128,6 @@ const addOrder = async (req: Request, res: Response) => {
       message: 'Order created successfully!',
       data: result,
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -144,7 +150,6 @@ const allOrdersOfTheUser = async (req: Request, res: Response) => {
       message: 'Order fetched successfully!',
       data: result,
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -169,8 +174,6 @@ const totalPriceOfTheUser = async (req: Request, res: Response) => {
         totalPrice: result,
       },
     })
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,

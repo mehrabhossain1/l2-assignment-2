@@ -39,7 +39,6 @@ const getSingleUserFromDB = async (userId: number): Promise<TUser[] | null> => {
 const getUpdatedUserFromDB = async (
   userId: number,
   userData: TUser,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<TUser | null> => {
   if (!(await UserModel.isUserExists(userId))) {
     throw new Error('No users in the db with this id')

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose'
 import { IUserModel, TUser } from './user.interface'
 import bcrypt from 'bcrypt'
@@ -41,7 +42,6 @@ userSchema.statics.isUserExists = async function (userId: number) {
 
 // Password hashing
 userSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this
   user.password = await bcrypt.hash(
     user.password,

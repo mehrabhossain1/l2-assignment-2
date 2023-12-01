@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model } from 'mongoose'
 
 export type TOrder = {
@@ -28,7 +29,6 @@ export type TUser = {
 }
 
 export interface IUserModel extends Model<TUser> {
-  // eslint-disable-next-line no-unused-vars
   isUserExists(userId: number): Promise<TUser | null>
 }
 
