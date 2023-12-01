@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { userServices } from './user.service'
@@ -25,11 +27,11 @@ const createUser = async (req: Request, res: Response) => {
         address: result.address,
       },
     })
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'User already exists',
-      error,
+      error: error.message,
     })
   }
 }
@@ -43,11 +45,11 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: 'Users fetched successfully!',
       data: result,
     })
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error,
+      error: error.message,
     })
   }
 }
@@ -66,7 +68,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }
@@ -91,7 +93,7 @@ const updateUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }
@@ -105,20 +107,21 @@ const deleteUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'User deleted successfully!',
-      data: result,
+      data: null,
     })
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }
 
+// Order Management
 const addOrder = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId
+    const { userId } = req.params
     const orderData = req.body
 
     const result = await userServices.addOrderIntoDB(Number(userId), orderData)
@@ -126,20 +129,20 @@ const addOrder = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: result,
+      data: null,
     })
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }
 
 const allOrdersOfTheUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId
+    const { userId } = req.params
 
     const result = await userServices.getAllOrdersOfTheUserFromDB(
       Number(userId),
@@ -154,14 +157,14 @@ const allOrdersOfTheUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }
 
 const totalPriceOfTheUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId
+    const { userId } = req.params
 
     const result = await userServices.calculateTotalPriceOfAllOrders(
       Number(userId),
@@ -178,7 +181,7 @@ const totalPriceOfTheUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'User not found',
-      error: error.message,
+      error: error.error,
     })
   }
 }

@@ -28,11 +28,16 @@ const getSingleUserFromDB = async (userId: number): Promise<TUser[] | null> => {
       {
         $match: { userId },
       },
-    ]).project({ password: 0, _id: 0, orders: 0, __v: 0 })
+    ]).project({ password: 0, _id: 0, orders: 0, __v: 0, isDeleted: 0 })
 
     return result
   } else {
-    throw new Error('No users in the db with this id')
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
   }
 }
 
@@ -41,7 +46,12 @@ const getUpdatedUserFromDB = async (
   userData: TUser,
 ): Promise<TUser | null> => {
   if (!(await UserModel.isUserExists(userId))) {
-    throw new Error('No users in the db with this id')
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
   } else {
     const result = await UserModel.findOneAndUpdate(
       { userId: userId },
@@ -50,7 +60,7 @@ const getUpdatedUserFromDB = async (
         new: true,
         runValidators: true,
       },
-    ).select('-password -_id -orders -__v')
+    ).select('-password -_id -orders -__v -isDeleted')
 
     return result
   }
@@ -58,7 +68,12 @@ const getUpdatedUserFromDB = async (
 
 const deleteUserFromDB = async (userId: number) => {
   if (!(await UserModel.isUserExists(userId))) {
-    throw new Error('No users in the db with this id')
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
   } else {
     const result = await UserModel.updateOne({ userId }, { isDeleted: true })
     return result
@@ -70,7 +85,12 @@ const addOrderIntoDB = async (userId: number, orderData: TOrder) => {
   const user = await UserModel.findOne({ userId })
 
   if (!user) {
-    throw new Error('User not found')
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
   }
 
   if (!user.orders) {
@@ -84,34 +104,52 @@ const addOrderIntoDB = async (userId: number, orderData: TOrder) => {
 }
 
 const getAllOrdersOfTheUserFromDB = async (userId: number) => {
-  const user = await UserModel.findOne({ userId })
-  const result = await user?.orders
-  return result
+  if (!(await UserModel.isUserExists(userId))) {
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    }
+  } else {
+    const result = await UserModel.findOne({ userId }).select('orders -_id')
+
+    return result
+  }
 }
 
 const calculateTotalPriceOfAllOrders = async (userId: number) => {
-  const result = await UserModel.aggregate([
-    {
-      $match: {
-        userId: userId,
+  if (!(await UserModel.isUserExists(userId))) {
+    throw {
+      error: {
+        code: 404,
+        description: 'User not found!',
       },
-    },
-    {
-      $addFields: {
-        totalPrice: {
-          $reduce: {
-            input: '$orders',
-            initialValue: 0,
-            in: {
-              $add: ['$$value', '$$this.price'],
+    }
+  } else {
+    const result = await UserModel.aggregate([
+      {
+        $match: {
+          userId: userId,
+        },
+      },
+      {
+        $addFields: {
+          totalPrice: {
+            $reduce: {
+              input: '$orders',
+              initialValue: 0,
+              in: {
+                $add: ['$$value', '$$this.price'],
+              },
             },
           },
         },
       },
-    },
-  ])
+    ])
 
-  return result[0].totalPrice
+    return result[0].totalPrice
+  }
 }
 
 export const userServices = {
