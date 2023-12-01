@@ -8,7 +8,7 @@ async function main() {
     console.log('Db connected')
 
     app.listen(config.port, () => {
-      console.log(`Example app listening on port ${config.port}`)
+      console.log(`App is running on http://localhost:${config.port}/`)
     })
   } catch (error) {
     console.log(error)
