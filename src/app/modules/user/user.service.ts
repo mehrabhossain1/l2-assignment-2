@@ -90,6 +90,31 @@ const getAllOrdersOfTheUserFromDB = async (userId: number) => {
   return result
 }
 
+const calculateTotalPriceOfAllOrders = async (userId: number) => {
+  const result = await UserModel.aggregate([
+    {
+      $match: {
+        userId: userId,
+      },
+    },
+    {
+      $addFields: {
+        totalPrice: {
+          $reduce: {
+            input: '$orders',
+            initialValue: 0,
+            in: {
+              $add: ['$$value', '$$this.price'],
+            },
+          },
+        },
+      },
+    },
+  ])
+
+  return result
+}
+
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
@@ -98,4 +123,5 @@ export const userServices = {
   deleteUserFromDB,
   addOrderIntoDB,
   getAllOrdersOfTheUserFromDB,
+  calculateTotalPriceOfAllOrders,
 }

@@ -135,13 +135,39 @@ const allOrdersOfTheUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId
 
-    const result = await userServices.getAllOrdersOfTheUserFromDB(userId)
+    const result = await userServices.getAllOrdersOfTheUserFromDB(
+      Number(userId),
+    )
 
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
       data: result,
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: error.message,
+    })
+  }
+}
+
+const totalPriceOfTheUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId
+
+    const result = await userServices.calculateTotalPriceOfAllOrders(
+      Number(userId),
+    )
+
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: result,
+    })
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
@@ -160,4 +186,5 @@ export const userControllers = {
   deleteUser,
   addOrder,
   allOrdersOfTheUser,
+  totalPriceOfTheUser,
 }
